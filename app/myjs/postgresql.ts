@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 
 // 配置数据库连接参数  postgres://[user]:[password]@[neon_hostname]/[dbname]
-const connectionString = 'postgres://postgres:postgres@localhost:5432?sslmode=require&sslrootcert=./app/myjs/root.crt';
+const connectionString = process.env.DATABASE_URL;
 export const MyPostpresqlPool = new Pool({
     connectionString: connectionString,
     ssl: true
