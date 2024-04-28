@@ -23,7 +23,7 @@ export async function fetchRevenue() {
     // console.log('Fetching revenue data...');
     await new Promise((resolve) => setTimeout(resolve, 3000));
     const data = await client.query<Revenue>(`SELECT * FROM revenue`);
-    //const data = await client.query(`SELECT * FROM revenue`)<Revenue>;
+    //const data = await client.query(`SELECT * FROM revenue`)<Revenue>;//vercelPool
     console.log('Data fetch completed after 3 seconds.');
 
     return data.rows;
@@ -173,7 +173,7 @@ export async function fetchInvoiceById(id: string) {
         invoices.amount,
         invoices.status
       FROM invoices
-      WHERE invoices.id = ${id};
+      WHERE invoices.id = '${id}';
     `);
 
     const invoice = data.rows.map((invoice) => ({
@@ -181,7 +181,6 @@ export async function fetchInvoiceById(id: string) {
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -229,8 +228,8 @@ export async function fetchFilteredCustomers(query: string) {
 		FROM customers
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
 		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
+		  customers.name ILIKE '${`%${query}%`}' OR
+      customers.email ILIKE '${`%${query}%`}'
 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
 		ORDER BY customers.name ASC
 	  `);
@@ -254,7 +253,7 @@ export async function getUser(email: string) {
   noStore();
   const client = await MyPostpresqlPool.connect();
   try {
-    const user = await client.query(`SELECT * FROM users WHERE email=${email}`);
+    const user = await client.query(`SELECT * FROM users WHERE email='${email}'`);
     return user.rows[0] as User;
   } catch (error) {
     console.error('Failed to fetch user:', error);
