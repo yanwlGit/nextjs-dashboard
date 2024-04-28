@@ -187,7 +187,7 @@ async function main() {
   await seedRevenue(client);
 
   // 释放客户端
-  await client.end();
+  client.release();
 }
 
 main().catch((err) => {
