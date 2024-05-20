@@ -5,17 +5,22 @@ import { z } from 'zod';
 import { MyPostpresqlPool } from '@/app/lib/mytest/my-postgresql';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
+import {textAxios} from '@/app/lib/restfulDataUtil';
+
 
 async function getUser(email: string): Promise<User | undefined> {
-    const client = await MyPostpresqlPool.connect();
+    //const client = await MyPostpresqlPool.connect();
     try {
-        const user = await client.query<User>(`SELECT * FROM users WHERE email='${email}'`);
-        return user.rows[0];
+        //const user = await client.query<User>(`SELECT * FROM users WHERE email='${email}'`);
+        const user1 = await textAxios<User>(email);
+        console.log(user1);
+        console.log(user1.rows[0]);
+        return user1.rows[0];
     } catch (error) {
         console.error('Failed to fetch user:', error);
         throw new Error('Failed to fetch user.');
-    }finally{
-        client.release();
+    } finally {
+        //client.release();
     }
 }
 

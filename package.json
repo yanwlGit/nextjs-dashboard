@@ -16,6 +16,7 @@
     "@types/tailwindcss": "^3.1.0",
     "@vercel/postgres": "^0.5.1",
     "autoprefixer": "10.4.15",
+    "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "clsx": "^2.0.0",
     "next": "^14.0.2",

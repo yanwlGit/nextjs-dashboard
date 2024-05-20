@@ -86,3 +86,10 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+
+export type RestfulData<R>  ={
+  status: '0' | '1';//0:失败，1:成功
+  message: string;
+  rows: R[];
+}
