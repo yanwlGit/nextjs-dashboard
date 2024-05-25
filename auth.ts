@@ -2,19 +2,19 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
-import { MyPostpresqlPool } from '@/app/lib/mytest/my-postgresql';
+//import { MyPostpresqlPool } from '@/app/lib/mytest/my-postgresql';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-import {textAxios} from '@/app/lib/restfulDataUtil';
+import {loginAxios} from '@/app/lib/restfulDataUtil';
 
 
 async function getUser(email: string): Promise<User | undefined> {
     //const client = await MyPostpresqlPool.connect();
     try {
         //const user = await client.query<User>(`SELECT * FROM users WHERE email='${email}'`);
-        const user1 = await textAxios<User>(email);
-        console.log(user1);
-        console.log(user1.rows[0]);
+        const user1 = await loginAxios<User>(`getUserByEmail/${email}`);
+        //console.log(user1);
+        //console.log(user1.rows[0]);
         return user1.rows[0];
     } catch (error) {
         console.error('Failed to fetch user:', error);
