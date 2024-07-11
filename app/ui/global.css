@@ -16,3 +16,8 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/*不显示左下角错误提示*/
+nextjs-portal {
+  display: none;
+}

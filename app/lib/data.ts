@@ -21,7 +21,7 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    const querMap = await queryAxios<User>('getUserByMap');
+    const querMap = await queryAxios<User>('curMessage');
     console.log("queryAxiosTest---->"+querMap);
     
     // console.log('Fetching revenue data...');
@@ -31,9 +31,10 @@ export async function fetchRevenue() {
     console.log('Data fetch completed after 3 seconds.');
 
     return data.rows;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
+  } catch (error:any) {
+    const errorMsg=error.message;
+    console.error('Database Error:', errorMsg);
+    throw error;
   } finally {
     client.release();
   }

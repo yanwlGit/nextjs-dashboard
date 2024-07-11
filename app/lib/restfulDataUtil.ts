@@ -1,10 +1,12 @@
 import axios from 'axios';
 import type { RestfulData } from '@/app/lib/definitions';
+import { auth } from '@/auth'
 
-const loginBaseUrl = process.env.PREFIX_LOGIN_URL_BASE;
+const loginUrl = process.env.LOGIN_URL;
 const queryBaseUrl = process.env.PREFIX_DATA_URL_BASE;
 
-export async function loginAxios<R>(url: string): Promise<RestfulData<R>> {
+//export async function loginAxios<R>(uname: string,pwd: string): Promise<RestfulData<R>>
+export async function loginAxios<R>(uname: string, pwd: string) {
   /*const aa={
       message: '查询成功',
       rows: [
@@ -23,9 +25,10 @@ export async function loginAxios<R>(url: string): Promise<RestfulData<R>> {
   const jsonString = JSON.stringify(aa);
   const jsonObject = JSON.parse(jsonString);
   return jsonObject;*/
-  console.log(`${loginBaseUrl}${url}`);
-  // 向给定ID的用户发起请求
-  return await axios.post(`${loginBaseUrl}${url}`)
+
+
+  // httpBasic 认证 axios只支持get方式
+  return await axios.get(`${loginUrl}`, { auth: { 'username': `${uname}`, 'password': `${pwd}` } })
     .then(function (response) {
       // 处理成功情况
       //console.log(response.data);
@@ -34,6 +37,7 @@ export async function loginAxios<R>(url: string): Promise<RestfulData<R>> {
     .catch(function (error) {
       // 处理错误情况
       console.log("loginAxios error---->" + error);
+      throw error;
     })
     .finally(function () {
       // 总是会执行
@@ -41,24 +45,25 @@ export async function loginAxios<R>(url: string): Promise<RestfulData<R>> {
 }
 
 export async function queryAxios<R>(url: string): Promise<RestfulData<R>> {
-
-  /*axios.post('/api/data', JSON.stringify({ key: 'value' }), {
-    headers: { 'Content-Type': 'application/json' }
+  /*const axiosInstance = axios.create({
+    baseURL: `${queryBaseUrl}${url}`,
+    headers: {
+      Authorization: `Bearer ${session?.user?.name}`
+    }
   });*/
-
-  console.log(`${queryBaseUrl}${url}`);
-  // 向给定ID的用户发起请求
-  return await axios.post(`${queryBaseUrl}${url}`, JSON.stringify({ token: 'testToken' }),{
-    headers: { 'Content-Type': 'application/json' }
+  const session = await auth();
+  return await axios.post(`${queryBaseUrl}${url}`, JSON.stringify({ message: `hello message` }), {
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.user?.name}` }
   })
     .then(function (response) {
       // 处理成功情况
-      console.log(response.data);
+      console.log("result1---->" + response.data);
       return response.data;
     })
     .catch(function (error) {
       // 处理错误情况
       console.log("queryAxios error---->" + error);
+      throw error;
     })
     .finally(function () {
       // 总是会执行
